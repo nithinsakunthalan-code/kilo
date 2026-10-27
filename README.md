@@ -5,6 +5,7 @@ a chat assistant that answers FAQs and explains error codes, and support tickets
 
 **Live site:** https://YOUR-KILO.onrender.com  <!-- TODO: replace with your HTTPS link after deploying -->
 **Health check:** https://YOUR-KILO.onrender.com/health/
+**GitHub repository:** https://github.com/nithinsakunthalan-code/kilo
 
 ## Requirements checklist
 
