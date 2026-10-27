@@ -55,9 +55,15 @@ FAQS = [
      'Yes. KILO has a JSON REST API under /api/ for meals, workouts, goals and a daily summary. Create a token '
      'with POST /api/auth/token/ and send it as an Authorization: Token header. BACKEND.md describes every endpoint.',
      'api rest json token developer integrate endpoint programmatic'),
+    ('Assistant', 'Can the assistant make me a diet plan?',
+     'Yes. Tell it your weight, how much you want to lose or gain and in how long, for example "I weigh 80 kg '
+     'and want to lose 5 kg in 2 months". It works out a daily calorie and protein target at a safe pace and '
+     'a simple meal split, and shows how to set those on the Goals page. It is general guidance, not medical advice.',
+     'diet plan meal weight loss lose gain calories protein target coach nutrition'),
     ('Assistant', 'What can the KILO assistant do?',
-     'It answers questions using this FAQ, explains error codes such as 404 or 429, and opens a support ticket '
-     'when it cannot answer so that a person can follow up.',
+     'It answers questions using this FAQ, builds a calorie and protein plan for your weight goal, explains '
+     'error codes such as 404 or 429, and opens a support ticket when it cannot answer so that a person can '
+     'follow up.',
      'assistant chatbot bot ai help capabilities features chat'),
     ('Assistant', 'What happens if the assistant cannot answer my question?',
      'It creates a support ticket with your question and gives you a ticket number such as TKT-00012. You can '

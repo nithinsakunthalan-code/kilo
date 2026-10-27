@@ -137,6 +137,44 @@ class AssistantTests(FreshStateMixin, TestCase):
         self.assertEqual(self.chat('hi').json()['source'], 'smalltalk')
         self.assertEqual(Ticket.objects.count(), 0)
 
+    def test_diet_plan_question_is_answered_not_ticketed(self):
+        data = self.chat('i weigh 80 kilograms i need a diet plan so i can reduce 5kg in a month').json()
+        self.assertEqual(data['source'], 'coach')
+        self.assertIsNone(data['ticket'])
+        self.assertIn('Daily target: 1,600 kcal', data['reply'])
+        self.assertIn('Protein 144 g', data['reply'])
+        self.assertIn('faster than', data['reply'])           # 5 kg/month is flagged as too fast
+        self.assertIn('Goals page', data['reply'])
+        self.assertEqual(Ticket.objects.count(), 0)
+
+    def test_diet_plan_without_details_asks_for_them(self):
+        data = self.chat('give me a diet plan').json()
+        self.assertEqual(data['source'], 'coach')
+        self.assertIn('Tell me', data['reply'])
+        self.assertEqual(Ticket.objects.count(), 0)
+
+    def test_calorie_goal_faq_is_not_hijacked_by_coach(self):
+        self.assertEqual(self.chat('How do I change my calorie or protein goal?').json()['source'], 'faq')
+
+    @override_settings(ANTHROPIC_API_KEY='test-key')
+    def test_general_fitness_question_uses_llm_when_key_set(self):
+        llm = mock.Mock()
+        llm.raise_for_status.return_value = None
+        llm.json.return_value = {'content': [{'type': 'text', 'text': 'Aim for 7 to 9 hours of sleep.'}]}
+        with mock.patch('support.assistant.requests.post', return_value=llm):
+            data = self.chat('how does sleeping affect muscle recovery?').json()
+        self.assertEqual((data['source'], data['reply']), ('llm', 'Aim for 7 to 9 hours of sleep.'))
+        self.assertEqual(Ticket.objects.count(), 0)
+
+    @override_settings(ANTHROPIC_API_KEY='test-key')
+    def test_off_topic_llm_no_answer_still_creates_ticket(self):
+        llm = mock.Mock()
+        llm.raise_for_status.return_value = None
+        llm.json.return_value = {'content': [{'type': 'text', 'text': 'NO_ANSWER'}]}
+        with mock.patch('support.assistant.requests.post', return_value=llm):
+            data = self.chat('who won the cricket world cup in 2011 final match').json()
+        self.assertEqual(data['source'], 'ticket')
+
     def test_chat_logged_to_mongodb(self):
         data = self.chat('How do I log a workout?', 'sess-1').json()
         doc = self.mongo_db.chat_logs.find_one({'message_id': data['message_id']})
