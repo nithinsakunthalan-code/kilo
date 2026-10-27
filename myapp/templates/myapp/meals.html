@@ -1,0 +1,74 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Meals{% endblock %}
+
+{% block content %}
+<p class="eyebrow">Nutrition</p>
+<h1>Meals</h1>
+
+<div class="daynav">
+    <a href="?date={{ prev_day|date:'Y-m-d' }}">&larr;</a>
+    <strong>{% if is_today %}Today · {% endif %}{{ day|date:"D, j M Y" }}</strong>
+    <a href="?date={{ next_day|date:'Y-m-d' }}">&rarr;</a>
+</div>
+
+<section class="grid two">
+    <div class="card">
+        <h2>Log a meal</h2>
+        <div class="lookup" id="lookup" data-url="{% url 'food-lookup' %}">
+            <label class="field"><span>Look up food (optional)</span></label>
+            <div class="lookup-row">
+                <input type="search" id="lookup-q" placeholder="e.g. banana, paneer, oats" maxlength="60" aria-label="Food name">
+                <input type="number" id="lookup-grams" class="grams" value="100" min="1" max="5000" aria-label="Portion in grams" title="Portion in grams">
+                <button type="button" id="lookup-btn">Search</button>
+            </div>
+            <p class="lookup-note" id="lookup-note">Enter a portion in grams, search, then pick a result to fill the form.</p>
+            <ul class="lookup-results" id="lookup-results"></ul>
+        </div>
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <label class="field {% if field.name in 'name' %}wide{% endif %}">
+                    <span>{{ field.label }}</span>
+                    {{ field }}
+                    {% for e in field.errors %}<small class="error">{{ e }}</small>{% endfor %}
+                </label>
+            {% endfor %}
+            <button class="btn" type="submit">Add meal</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="card-head">
+            <h2>{{ day|date:"j M" }}</h2>
+            <span class="muted">{{ totals.calories|default:0 }} / {{ goal.daily_calories }} kcal</span>
+        </div>
+        {% for m in meals %}
+            <div class="row">
+                <div>
+                    <strong>{{ m.name }}</strong><br>
+                    <span class="muted tag">{{ m.get_meal_type_display }} · P {{ m.protein }} · C {{ m.carbs }} · F {{ m.fat }}</span>
+                </div>
+                <div class="row-end">
+                    <span>{{ m.calories }} <span class="muted">kcal</span></span>
+                    <form method="post" action="{% url 'delete_meal' m.pk %}">{% csrf_token %}<button class="x" title="Delete" aria-label="Delete {{ m.name }}">&times;</button></form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="muted empty">No meals on this day.</p>
+        {% endfor %}
+        {% if meals %}
+        <div class="row total">
+            <span class="muted">Total · P {{ totals.protein|default:0 }} · C {{ totals.carbs|default:0 }} · F {{ totals.fat|default:0 }}</span>
+            <strong>{{ totals.calories|default:0 }} kcal</strong>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'support/foodlookup.js' %}" defer></script>
+{% endblock %}

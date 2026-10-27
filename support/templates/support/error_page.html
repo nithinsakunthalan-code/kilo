@@ -1,0 +1,9 @@
+<section class="error-page">
+    <p class="error-code {% if big_red %}red{% endif %}">{{ code }}</p>
+    <h1>{{ headline }}</h1>
+    <p class="lead">{{ detail }}</p>
+    <div class="actions">
+        <button class="btn" data-ask="I got a {{ code }} error{% if path %} on {{ path }}{% endif %}. What does it mean and what can I do?">Ask the assistant</button>
+        <a class="btn ghost" href="{% url 'dashboard' %}">Back to KILO</a>
+    </div>
+</section>

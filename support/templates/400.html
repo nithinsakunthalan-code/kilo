@@ -1,0 +1,5 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Bad request{% endblock %}
+{% block content %}
+{% include 'support/error_page.html' with code='400' headline='We could not understand that request' detail='Check the address or the values you entered and try again.' %}
+{% endblock %}

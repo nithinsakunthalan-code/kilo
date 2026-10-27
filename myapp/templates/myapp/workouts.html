@@ -1,0 +1,53 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Workouts{% endblock %}
+
+{% block content %}
+<p class="eyebrow">Training</p>
+<h1>Workouts</h1>
+
+<section class="stats">
+    <div class="card stat"><span class="big">{{ sessions }}</span><span class="muted">active days · 30d</span></div>
+    <div class="card stat"><span class="big">{{ minutes }}</span><span class="muted">minutes</span></div>
+    <div class="card stat"><span class="big red">{{ burned }}</span><span class="muted">kcal burned</span></div>
+</section>
+
+<section class="grid two">
+    <div class="card">
+        <h2>Log a workout</h2>
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <label class="field {% if field.name == 'name' or field.name == 'notes' %}wide{% endif %}">
+                    <span>{{ field.label }}</span>
+                    {{ field }}
+                    {% for e in field.errors %}<small class="error">{{ e }}</small>{% endfor %}
+                </label>
+            {% endfor %}
+            <button class="btn" type="submit">Add workout</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Last 30 days</h2>
+        {% for w in workouts %}
+            <div class="row">
+                <div>
+                    <strong>{{ w.name }}</strong><br>
+                    <span class="muted tag">
+                        {{ w.date|date:"j M" }} · {{ w.get_category_display }} · {{ w.duration_min }} min{% if w.sets and w.reps %} · {{ w.sets }}×{{ w.reps }}{% if w.weight_kg %} @ {{ w.weight_kg }} kg{% endif %}{% endif %}
+                    </span>
+                    {% if w.notes %}<br><span class="muted tag">{{ w.notes }}</span>{% endif %}
+                </div>
+                <div class="row-end">
+                    <span>{{ w.calories_burned }} <span class="muted">kcal</span></span>
+                    <form method="post" action="{% url 'delete_workout' w.pk %}">{% csrf_token %}<button class="x" title="Delete" aria-label="Delete {{ w.name }}">&times;</button></form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="muted empty">No workouts logged yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

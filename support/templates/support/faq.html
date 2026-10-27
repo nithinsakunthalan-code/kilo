@@ -1,0 +1,23 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+<p class="eyebrow">Help</p>
+<h1>FAQ</h1>
+<p class="muted">{{ count }} questions. Cannot find yours? <button class="link-btn" data-ask="">Ask the assistant</button></p>
+
+{% for category, items in categories.items %}
+<section class="faq-group">
+    <h2>{{ category }}</h2>
+    {% for item in items %}
+    <details class="faq-item">
+        <summary>{{ item.question }}</summary>
+        <p>{{ item.answer }}</p>
+    </details>
+    {% endfor %}
+</section>
+{% empty %}
+<p class="muted">No FAQs yet.</p>
+{% endfor %}
+{% endblock %}

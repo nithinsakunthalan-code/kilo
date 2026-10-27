@@ -1,0 +1,35 @@
+# Render Blueprint: one web service + one PostgreSQL database.
+# Secrets marked `sync: false` are entered in the Render dashboard, never committed.
+databases:
+  - name: kilo-db
+    plan: free
+    databaseName: kilo
+    user: kilo
+
+services:
+  - type: web
+    name: kilo
+    runtime: python
+    plan: free
+    buildCommand: bash build.sh
+    startCommand: gunicorn myproject.wsgi --workers 2 --access-logfile -
+    healthCheckPath: /health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DEBUG
+        value: "0"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SECURE_SSL_REDIRECT
+        value: "1"
+      - key: SECURE_HSTS_SECONDS
+        value: "31536000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kilo-db
+          property: connectionString
+      - key: MONGODB_URI
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false

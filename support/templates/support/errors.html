@@ -1,0 +1,25 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Error codes{% endblock %}
+
+{% block content %}
+<p class="eyebrow">Reference</p>
+<h1>Error codes</h1>
+<p class="muted">What each code means and what to do. You can also ask the assistant, e.g. &ldquo;what does 429 mean?&rdquo;</p>
+
+<div class="table-wrap">
+<table class="codes">
+    <thead><tr><th>Code</th><th>Name</th><th>What it means</th><th>How to fix it</th></tr></thead>
+    <tbody>
+    {% for e in codes %}
+        <tr>
+            <td><span class="code {% if e.http_status >= 500 %}red{% endif %}">{{ e.code }}</span></td>
+            <td>{{ e.title }}</td>
+            <td>{{ e.meaning }}</td>
+            <td>{{ e.how_to_fix }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

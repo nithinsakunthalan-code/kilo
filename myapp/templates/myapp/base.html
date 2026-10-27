@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Dashboard{% endblock %} · KILO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap">
+    <link rel="stylesheet" href="{% static 'myapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'support/support.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{% url 'dashboard' %}">KILO<span class="dot">.</span></a>
+        <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="nav">Menu</button>
+        <nav id="nav" aria-label="Main">
+            {% with current=request.resolver_match.url_name %}
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="{% if current == 'dashboard' %}active{% endif %}">Today</a>
+            <a href="{% url 'meals' %}" class="{% if current == 'meals' %}active{% endif %}">Meals</a>
+            <a href="{% url 'workouts' %}" class="{% if current == 'workouts' %}active{% endif %}">Workouts</a>
+            <a href="{% url 'goals' %}" class="{% if current == 'goals' %}active{% endif %}">Goals</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="{% if current == 'login' %}active{% endif %}">Sign in</a>
+            <a href="{% url 'signup' %}" class="{% if current == 'signup' %}active{% endif %}">Sign up</a>
+            {% endif %}
+            <a href="{% url 'faq' %}" class="{% if current == 'faq' %}active{% endif %}">FAQ</a>
+            <a href="{% url 'error_codes' %}" class="{% if current == 'error_codes' %}active{% endif %}">Errors</a>
+            <a href="{% url 'support' %}" class="{% if current == 'support' %}active{% endif %}">Support</a>
+            {% endwith %}
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" class="logout">{% csrf_token %}<button type="submit" title="Sign out">{{ user.username }} &middot; Sign out</button></form>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">KILO — calories &amp; lifts · <a href="{% url 'health' %}">System status</a></footer>
+
+    {% include 'support/chat_widget.html' %}
+    <script src="{% static 'support/site.js' %}" defer></script>
+    <script src="{% static 'support/chat.js' %}" defer></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

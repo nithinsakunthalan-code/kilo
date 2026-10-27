@@ -1,0 +1,92 @@
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+<p class="eyebrow">{{ today|date:"l, j F" }}</p>
+<h1>Today</h1>
+
+<section class="grid hero">
+    <div class="card ring-card">
+        <div class="ring" style="--deg: {{ ring_deg }}deg;">
+            <div class="ring-inner">
+                <span class="big">{{ calories }}</span>
+                <span class="muted">of {{ goal.daily_calories }} kcal</span>
+            </div>
+        </div>
+        <ul class="kv">
+            <li><span class="muted">Burned</span><strong>{{ burned }}</strong></li>
+            <li>
+                <span class="muted">{% if over %}Over by{% else %}Remaining{% endif %}</span>
+                <strong class="{% if over %}red{% endif %}">{% if over %}{{ remaining|cut:"-" }}{% else %}{{ remaining }}{% endif %}</strong>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Macros</h2>
+        <div class="meter">
+            <div class="meter-head"><span>Protein</span><span class="muted">{{ protein }} / {{ goal.daily_protein }} g</span></div>
+            <div class="bar"><span class="fill red-fill" style="width: {{ protein_pct }}%"></span></div>
+        </div>
+        <ul class="kv inline">
+            <li><span class="muted">Carbs</span><strong>{{ carbs }} g</strong></li>
+            <li><span class="muted">Fat</span><strong>{{ fat }} g</strong></li>
+        </ul>
+
+        <h2 class="spaced">Training this week</h2>
+        <div class="meter">
+            <div class="meter-head"><span>Sessions</span><span class="muted">{{ workouts_this_week }} / {{ goal.weekly_workouts }}</span></div>
+            <div class="bar"><span class="fill" style="width: {{ workout_pct }}%"></span></div>
+        </div>
+    </div>
+</section>
+
+<section class="card">
+    <div class="card-head">
+        <h2>Last 7 days</h2>
+        <div class="legend"><span class="key white"></span>Eaten <span class="key red"></span>Burned</div>
+    </div>
+    <div class="chart">
+        {% for d in week %}
+        <div class="col {% if d.is_today %}today{% endif %}">
+            <div class="bars">
+                <span class="b eaten" style="height: {{ d.eaten_h }}%" title="{{ d.eaten }} kcal eaten"></span>
+                <span class="b burned" style="height: {{ d.burned_h }}%" title="{{ d.burned }} kcal burned"></span>
+            </div>
+            <span class="muted label">{{ d.label }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="grid two">
+    <div class="card">
+        <div class="card-head">
+            <h2>Meals</h2>
+            <a class="link" href="{% url 'meals' %}">+ Log meal</a>
+        </div>
+        {% for m in todays_meals %}
+            <div class="row">
+                <div><strong>{{ m.name }}</strong><br><span class="muted tag">{{ m.get_meal_type_display }}</span></div>
+                <span>{{ m.calories }} <span class="muted">kcal</span></span>
+            </div>
+        {% empty %}
+            <p class="muted empty">Nothing logged yet.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <div class="card-head">
+            <h2>Workouts</h2>
+            <a class="link" href="{% url 'workouts' %}">+ Log workout</a>
+        </div>
+        {% for w in todays_workouts %}
+            <div class="row">
+                <div><strong>{{ w.name }}</strong><br><span class="muted tag">{{ w.get_category_display }} · {{ w.duration_min }} min</span></div>
+                <span>{{ w.calories_burned }} <span class="muted">kcal</span></span>
+            </div>
+        {% empty %}
+            <p class="muted empty">Rest day, or not logged yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

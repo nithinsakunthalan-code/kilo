@@ -1,0 +1,18 @@
+<div id="chat" class="chat" data-url="{% url 'chat' %}" data-feedback-url="{% url 'chat-feedback' %}" data-email-url="{% url 'chat-ticket-email' %}">
+    <button id="chat-toggle" class="chat-toggle" aria-label="Open the KILO assistant" aria-expanded="false" aria-controls="chat-panel">
+        <span class="chat-toggle-open">Ask AI</span><span class="chat-toggle-close" aria-hidden="true">&times;</span>
+    </button>
+    <section id="chat-panel" class="chat-panel" role="dialog" aria-label="KILO assistant" hidden>
+        <header class="chat-head">
+            <div><strong>KILO assistant</strong><span class="chat-sub">FAQs, error codes, support</span></div>
+            <button id="chat-close" class="chat-x" aria-label="Close chat">&times;</button>
+        </header>
+        <div id="chat-log" class="chat-log" aria-live="polite"></div>
+        <div id="chat-suggestions" class="chat-suggestions"></div>
+        <form id="chat-form" class="chat-form" autocomplete="off">
+            {% csrf_token %}
+            <input id="chat-input" type="text" maxlength="500" placeholder="Ask a question…" aria-label="Your message" required>
+            <button type="submit" aria-label="Send">Send</button>
+        </form>
+    </section>
+</div>

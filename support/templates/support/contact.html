@@ -1,0 +1,29 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Support{% endblock %}
+
+{% block content %}
+<p class="eyebrow">Get help</p>
+<h1>Support</h1>
+<p class="muted">Try the FAQ or the assistant first. If they cannot help, send us a message and it is saved as a support ticket.</p>
+
+{% if sent %}
+<div class="card success">
+    <h2>Message received</h2>
+    <p>Thank you. Your message was saved as support ticket <strong>{{ sent }}</strong>.</p>
+</div>
+{% endif %}
+
+<div class="card narrow">
+    <form method="post" class="form single" novalidate>
+        {% csrf_token %}
+        <label class="field wide"><span>Email (optional, for a reply)</span>
+            <input type="email" name="email" maxlength="254" value="{{ values.email }}" autocomplete="email">
+            {% if errors.email %}<small class="error">{{ errors.email }}</small>{% endif %}</label>
+        <label class="field wide"><span>Message</span>
+            <textarea name="message" rows="5" maxlength="2000" required>{{ values.message }}</textarea>
+            {% if errors.message %}<small class="error">{{ errors.message }}</small>{% endif %}</label>
+        <button class="btn" type="submit">Send message</button>
+    </form>
+</div>
+{% endblock %}

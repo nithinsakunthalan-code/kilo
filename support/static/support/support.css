@@ -1,0 +1,136 @@
+/* Support features (FAQ, error codes, chat widget, health, error pages, food lookup) in the KILO theme.
+   Uses the colour variables from myapp/style.css. */
+:root {
+    --surface-2: #1b1b1b;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+}
+
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.footer a:hover { color: var(--red); }
+.center { text-align: center; }
+textarea {
+    width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 8px;
+    padding: 0.65rem 0.8rem; font: inherit; font-weight: 300; color-scheme: dark; resize: vertical;
+}
+textarea:focus { outline: none; border-color: var(--red); }
+.link-btn { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; color: var(--red); font-weight: 400; }
+.link-btn:hover { text-decoration: underline; }
+.btn.ghost { background: transparent; border: 1px solid #444; color: var(--text); }
+.btn.ghost:hover { border-color: var(--text); filter: none; }
+a.btn { display: inline-block; text-align: center; }
+.success { border-left: 3px solid var(--ok); }
+.form .field.full { grid-column: 1 / -1; }
+
+/* mobile menu */
+.menu-btn { display: none; background: none; border: 1px solid var(--line); color: var(--text); padding: 0.4rem 0.9rem; border-radius: 999px; font: inherit; font-weight: 300; cursor: pointer; }
+
+/* ---------- FAQ ---------- */
+.faq-group { margin-top: 2rem; }
+.faq-item { border-top: 1px solid var(--line); padding: 0.2rem 0; }
+.faq-item:last-child { border-bottom: 1px solid var(--line); }
+.faq-item summary { cursor: pointer; padding: 0.9rem 0; font-size: 1.02rem; font-weight: 400; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; color: var(--red); font-size: 1.3rem; line-height: 1; }
+.faq-item[open] summary::after { content: '\2212'; }
+.faq-item p { color: #c9c9c9; padding-bottom: 1rem; margin: 0; max-width: 46rem; }
+
+/* ---------- error codes table ---------- */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; margin-top: 1.5rem; background: var(--surface); }
+.codes { width: 100%; border-collapse: collapse; min-width: 640px; }
+.codes th { text-align: left; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); font-weight: 400; }
+.codes th, .codes td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.codes tr:last-child td { border-bottom: 0; }
+.code { font-size: 1.2rem; font-weight: 200; white-space: nowrap; }
+.code.red { color: var(--red); }
+
+/* ---------- health ---------- */
+.status-overall { display: flex; align-items: center; gap: 1rem; }
+.status-overall .light { width: 14px; height: 14px; border-radius: 50%; background: var(--grey); flex: none; }
+.status-overall.ok .light { background: var(--ok); box-shadow: 0 0 12px var(--ok); }
+.status-overall.degraded .light { background: var(--warn); box-shadow: 0 0 12px var(--warn); }
+.status-overall.down .light { background: var(--red); box-shadow: 0 0 12px var(--red); }
+.checks { list-style: none; margin: 0; padding: 0; }
+.checks li { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--line); }
+.checks li:last-child { border: 0; }
+.checks b { font-weight: 400; }
+.s-ok { color: var(--ok); } .s-down { color: var(--red); } .s-not_configured { color: var(--warn); }
+
+/* ---------- error pages ---------- */
+.error-page { text-align: center; padding: 4rem 0 3rem; }
+.error-code { font-size: clamp(5rem, 22vw, 11rem); font-weight: 100; letter-spacing: -0.05em; line-height: 1; margin: 0 0 1rem; color: #3a3a3a; }
+.error-code.red { color: var(--red); }
+.error-page h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); }
+.error-page .lead { margin: 0 auto 1rem; color: #c9c9c9; max-width: 36rem; }
+.error-page .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1.5rem; }
+.error-page .btn { grid-column: auto; }
+
+/* ---------- food lookup (Meals page) ---------- */
+.lookup { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
+.lookup-row { display: flex; gap: 0.5rem; }
+.lookup-row input[type=search] { flex: 1; min-width: 0; }
+.lookup-row .grams { width: 5.5rem; flex: none; }
+.lookup-row button { background: var(--surface-2); border: 1px solid #333; color: var(--text); border-radius: 8px; padding: 0 1rem; font: inherit; font-weight: 300; cursor: pointer; }
+.lookup-row button:hover { border-color: var(--red); }
+.lookup-note { font-size: 0.78rem; margin: 0.5rem 0 0; color: var(--grey); }
+.lookup-results { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.lookup-results button { width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--line); color: var(--text); font: inherit; font-weight: 300; padding: 0.55rem 0; cursor: pointer; display: flex; justify-content: space-between; gap: 1rem; }
+.lookup-results button:hover span:first-child { color: var(--red); }
+.lookup-results .kcal { color: var(--grey); white-space: nowrap; font-size: 0.85rem; }
+
+/* ---------- chat widget ---------- */
+.chat { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 50; }
+.chat-toggle {
+    background: var(--red); color: #fff; border: 0; border-radius: 999px; height: 52px; min-width: 52px; padding: 0 1.3rem;
+    font: inherit; font-weight: 400; letter-spacing: 0.04em; cursor: pointer; box-shadow: 0 8px 30px rgba(229, 35, 27, 0.35);
+}
+.chat-toggle-close { display: none; font-size: 1.6rem; line-height: 1; }
+.chat.open .chat-toggle-open { display: none; }
+.chat.open .chat-toggle-close { display: inline; }
+.chat-panel {
+    position: absolute; right: 0; bottom: 66px; width: min(380px, calc(100vw - 2.5rem)); height: min(540px, calc(100vh - 8rem));
+    display: flex; flex-direction: column; background: var(--surface); border: 1px solid #333; border-radius: 16px;
+    overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+.chat-panel[hidden] { display: none; }
+.chat-head { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border-bottom: 1px solid var(--line); }
+.chat-head strong { font-weight: 400; }
+.chat-sub { display: block; color: var(--grey); font-size: 0.75rem; }
+.chat-x { background: none; border: 0; color: var(--grey); font-size: 1.5rem; cursor: pointer; line-height: 1; }
+.chat-x:hover { color: var(--red); }
+.chat-log { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.msg { max-width: 88%; padding: 0.6rem 0.85rem; border-radius: 12px; font-size: 0.92rem; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: anywhere; }
+.msg.user { align-self: flex-end; background: var(--text); color: var(--bg); border-bottom-right-radius: 3px; font-weight: 400; }
+.msg.bot { align-self: flex-start; background: var(--surface-2); border-bottom-left-radius: 3px; }
+.msg.typing { color: var(--grey); font-style: italic; }
+.msg-actions { margin-top: 0.5rem; display: flex; gap: 0.5rem; font-size: 0.75rem; color: var(--grey); white-space: normal; }
+.msg-actions button { background: none; border: 1px solid #333; color: var(--grey); border-radius: 999px; padding: 0.15rem 0.7rem; font: inherit; font-size: 0.75rem; cursor: pointer; }
+.msg-actions button:hover { border-color: var(--red); color: var(--text); }
+.ticket-form { display: flex; gap: 0.4rem; margin-top: 0.6rem; white-space: normal; }
+.ticket-form input { padding: 0.4rem 0.6rem; font-size: 0.85rem; }
+.ticket-form button { background: var(--red); border: 0; color: #fff; border-radius: 8px; padding: 0 0.8rem; font: inherit; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
+.chat-suggestions { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0 1rem 0.6rem; }
+.chat-suggestions:empty { display: none; }
+.chip { background: none; border: 1px solid #333; color: var(--text); border-radius: 999px; padding: 0.3rem 0.8rem; font: inherit; font-weight: 300; font-size: 0.8rem; cursor: pointer; }
+.chip:hover { border-color: var(--red); }
+.chat-form { display: flex; gap: 0.5rem; padding: 0.75rem; border-top: 1px solid var(--line); }
+.chat-form input { flex: 1; min-width: 0; font-size: 16px; }    /* 16px stops iOS zooming on focus */
+.chat-form button { background: var(--red); border: 0; color: #fff; border-radius: 8px; padding: 0 1rem; font: inherit; font-weight: 400; cursor: pointer; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 760px) {
+    .topbar { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+    .menu-btn { display: inline-block; }
+    .topbar nav { display: none; flex-direction: column; width: 100%; padding-top: 0.75rem; }
+    .topbar nav.open { display: flex; }
+    .topbar nav a { padding: 0.7rem 0.9rem; border-radius: 8px; }
+    .footer { padding-bottom: 6rem; }
+    .chart { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.35rem; }
+    .bars { gap: 2px; }
+    .b { width: 30%; max-width: 14px; }
+    .col .label { font-size: 0.62rem; letter-spacing: 0.02em; }
+    .chat { right: 0.75rem; bottom: 0.75rem; }
+    .chat-panel { position: fixed; right: 0.5rem; left: 0.5rem; bottom: 4.6rem; width: auto; height: min(70vh, 540px); }
+    .lookup-row { flex-wrap: wrap; }
+    .lookup-row input[type=search] { flex-basis: 100%; }
+}

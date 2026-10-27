@@ -1,0 +1,25 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Sign in{% endblock %}
+
+{% block content %}
+<p class="eyebrow">Welcome back</p>
+<h1>Sign in</h1>
+
+<div class="card narrow">
+    <form method="post" class="form single">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <label class="field wide">
+                <span>{{ field.label }}</span>
+                {{ field }}
+                {% for e in field.errors %}<small class="error">{{ e }}</small>{% endfor %}
+            </label>
+        {% endfor %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="btn" type="submit">Sign in</button>
+    </form>
+    <p class="muted empty">New here? <a class="link" href="{% url 'signup' %}">Create an account</a></p>
+</div>
+{% endblock %}
