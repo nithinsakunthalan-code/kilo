@@ -31,5 +31,4 @@ services:
           property: connectionString
       - key: MONGODB_URI
         sync: false
-      - key: ANTHROPIC_API_KEY
-        sync: false
+      # Optional: add ANTHROPIC_API_KEY later in the Render dashboard (Environment tab) to enable LLM answers.
